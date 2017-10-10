@@ -1,10 +1,13 @@
 package pkgCore;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.*;
 
+
+import java.util.ArrayList;
 import pkgEnum.eRank;
 import pkgEnum.eSuit;
+
 
 public class Deck {
 
@@ -19,19 +22,66 @@ public class Deck {
 		Collections.shuffle(cardsInDeck);
 	}
 
-	//TODO: Fix the Draw method so it throws an exception if the deck is empty
+
 	public Card Draw() {
+		try {
 		return cardsInDeck.remove(0);
+	} 
+		
+		catch(Exception NoCardsinDeck) {
+			System.out.println("No cards remaining in Deck");
+			return new Card(null, null);
+			
+		}
 	}
 	
-	//TODO: Write an overloaded Draw method to Draw a card of a given eSuit
+	public Card Draw(eSuit eSuit) {
+		Card card = new Card(null,null);
+		for (Card c: this.cardsInDeck) {
+			if (c.geteSuit() == eSuit) {
+				card = c;
+				cardsInDeck.remove(c);
+				 
+			}
+		}
 	
-	//TODO: Write an overloaded Draw method to Draw a card of a given eRank
+		return card;
+	}
+		
 
-	//TODO: Write a method that will return the number of a given eSuit left in the deck.
 	
-	//TODO: Write a method that will return the number of a given eRank left in the deck.
+	public Card Draw(eRank eRank) {
+		Card card = new Card(null,null);
+		for (Card c: this.cardsInDeck) {
+				if (c.geteRank() == eRank) {
+					card = c;
+					cardsInDeck.remove(c);
+				}
+		}
+		return card;
+
+	}
 	
-	//TODO: Write a method that will return 0 or 1 if a given card is left in the deck.
+	public int suitCount(eSuit suit) {
+		Stream<Card> cardsOfeSuit = cardsInDeck.stream().filter(c -> c.geteSuit() == suit);
+		return (int) cardsOfeSuit.count();
+	}
+
+	public int rankCount(eRank rank) {
+		Stream<Card> cardsOfeRank = cardsInDeck.stream().filter(c -> c.geteRank() == rank);
+		return (int) cardsOfeRank.count();
+	}
+	
+	
+	public int Count(Card card) {
+		if ((cardsInDeck.stream().filter(c -> c.geteRank() ==card.geteRank()
+				&& c.geteSuit() == card.geteSuit())).count() > 0) {
+			return 1;
+		}
+		return 0;
+
+	}
+
 	
 }
+	
